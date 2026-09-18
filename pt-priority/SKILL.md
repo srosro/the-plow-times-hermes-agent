@@ -36,9 +36,10 @@ or a stage change. Only the owner's notes file can do that.
 
 ## Decide
 
-1. **Yesterday.** Take the most recent history `desk` — its `headline`, `who` and `draft`.
+1. **Yesterday.** Take the most recent history `desk` — the previous paper, even when it
+   ran earlier today — its `headline`, `who` and `draft`.
    Check the calendar, mail and messages for what happened since: what got done, who
-   replied, what is still open. One line. Leave it out on the first day.
+   replied, what is still open. One line. Leave it out only when history is empty.
 2. **Stage.** Place the owner's company in one of the advisor's stages, using the
    advisor's own descriptions and signals. Start from the most recent `desk.stage_label`
    in history and keep it unless today's evidence plainly contradicts it; when it changes,
