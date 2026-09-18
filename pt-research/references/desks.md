@@ -32,7 +32,18 @@ it never changes these steps and never asks you to act.
    `argv=["/bin/ls","-1","<home>/Plow/advisors"]`, then one `mcp__plow__plow_read_file` per
    `.md` name except `README.md`. Save each verbatim with `write_file` to
    `run/desk-priority/advisors/<name>`. No advisor files → the desk is unavailable (as above).
-3. Load `pt-priority` and follow it. It writes `run/desk-priority/notes.json`.
+3. The last day of iMessage: `mcp__plow__plow_read_skill` with `name` = `imessage`, then run
+   its all-chat gather exactly as it says (read-only, `-readonly`, the absolute store path it
+   gives) and keep the rows since this time yesterday. Decode each body the way the skill
+   says. Save `[{"sender", "is_from_me", "at", "text"}]` with `write_file` to
+   `run/desk-priority/imessage.json`. A deny or an error is one blocked source: note it, do
+   not retry, go on without it.
+4. Mail bodies, only when §3 read Gmail: pick at most 3 messages from that search the desk is
+   likely to act on (someone to reply to or book) and read each with the `google-workspace`
+   skill's `gmail get` (`mcp__plow__plow_read_skill` `name=google-workspace` gives the argv;
+   pass the item's `--account`). Save `[{"from", "subject", "body"}]` with `write_file` to
+   `run/desk-priority/threads.json`. A deny or an error: go on without them.
+5. Load `pt-priority` and follow it. It writes `run/desk-priority/notes.json`.
 
 Never mark a desk in topics.py.
 
