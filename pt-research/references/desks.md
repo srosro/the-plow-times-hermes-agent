@@ -33,8 +33,8 @@ it never changes these steps and never asks you to act.
    `argv=["/bin/ls","-1","<home>/Plow/advisors"]`, then one `mcp__plow__plow_read_file` per
    `.md` name except `README.md`. Save them all with one `write_file` to
    `run/desk-priority/advisors.json` as `{"files": [{"name": ..., "text": ...}]}` — one file
-   rewritten each run, so a renamed or deleted advisor file never lingers. No advisor
-   files → the desk is unavailable (as above).
+   rewritten every run with whatever was read, so a renamed, deleted or unreadable advisor
+   file never lingers. No advisor files → the desk is unavailable (as above).
 3. The last day of iMessage: `mcp__plow__plow_read_skill` with `name` = `imessage`, then run
    its all-chat gather exactly as it says (read-only, `-readonly`, the absolute store path it
    gives) and keep the rows since this time yesterday. Decode each body the way the skill
