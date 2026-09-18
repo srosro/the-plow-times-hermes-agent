@@ -346,7 +346,7 @@ Stop. On their next message:
 
   - **never overwrite an existing file**: every line already in it stays as it was. Never
     paste the owner's file back in chat.
-  Only once that write succeeds: `record_setup.py <config path> priority.configured=true priority.file=~/Plow/prioritization.md`.
+  Only once the goal is in the file (written now, or already there): `record_setup.py <config path> priority.configured=true priority.file=~/Plow/prioritization.md`.
   A denied or failed write → say so in one line and record nothing; the question stays open.
   Say in one line that the desk reads their Mac every morning and that they can correct
   it any time by texting ("Raj is my cousin", "stop telling me to hire").
