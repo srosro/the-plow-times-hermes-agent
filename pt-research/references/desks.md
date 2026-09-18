@@ -124,7 +124,8 @@ Source label: `Google Calendar`.
 **2. Calendar.app — only if step 1 failed.** Measured live on 2026-09-18:
 Calendar.app AppleScript over a full set of synced calendars hit
 `AppleEvent timed out (-1712)` on every attempt, so try it at most once,
-through `plow_run_applescript`, for today only. Source label: `Calendar.app`.
+through `plow_run_applescript`, for today and tomorrow (what `events.json` holds).
+Source label: `Calendar.app`.
 
 Print a tight, sourced list the edition can turn into two paragraphs
 ("Today: …" / "Upcoming: …"). If neither source can be read, say so in
