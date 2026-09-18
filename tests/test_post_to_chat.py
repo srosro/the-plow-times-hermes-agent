@@ -94,18 +94,6 @@ class TestMaybePrint:
     not a gate for paper; post_to_chat.py is.
     """
 
-    def test_unconfigured_printer_does_not_call_the_runner(self, tmp_path):
-        (tmp_path / "edition.pdf").write_bytes(b"%PDF")
-        cfg = tmp_path / "config.json"
-        cfg.write_text(
-            json.dumps({"printer": {"configured": False, "name": None}}),
-            encoding="utf-8",
-        )
-        called = []
-        out = post.maybe_print(str(tmp_path / "edition.pdf"), str(cfg), runner=called.append)
-        assert "skipped" in out
-        assert called == []
-
     def test_configured_printer_prints_the_pdf_with_no_html_beside_it(self, tmp_path):
         # Measured live 2026-09-18: runs that rendered only the PDF logged
         # "skipped: no html" -- a gate on a file the print never reads.

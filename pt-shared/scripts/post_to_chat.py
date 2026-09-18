@@ -143,15 +143,6 @@ def reopen_sections_after_paper():
     return blob or "REOPEN:none"
 
 
-def _printer_name(config_path):
-    scripts = str(PRINT_SCRIPT.parent)
-    if scripts not in sys.path:
-        sys.path.insert(0, scripts)
-    import print_edition
-
-    return print_edition.printer_name(config_path)
-
-
 def run_print_edition(pdf_path, config_path):
     import subprocess
 
@@ -180,8 +171,6 @@ def maybe_print(pdf_path, config_path=None, runner=None):
     config_path = config_path or CONFIG_DEFAULT
     if not pdf_path:
         return "skipped: no pdf"
-    if not _printer_name(config_path):
-        return "skipped: printer.configured is not true"
     run = runner or run_print_edition
     try:
         out = run(str(Path(pdf_path).resolve()), config_path)

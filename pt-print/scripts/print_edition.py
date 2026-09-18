@@ -41,7 +41,7 @@ from bearer_http import NoRedirect, require  # noqa: E402
 MCP_TIMEOUT = 60
 POLL_SECONDS = 120
 PATH_RE = re.compile(
-    r"(/Users/[^\s'\"]+/Plow/pt/edition-[0-9-]+\.(?:html|pdf)(?:\.b64)?)"
+    r"(/Users/[^\s'\"]+/Plow/pt/edition-[0-9-]+\.pdf(?:\.b64)?)"
 )
 
 
