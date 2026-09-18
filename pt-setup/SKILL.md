@@ -321,23 +321,35 @@ Send only the `NEXT_QUESTION` it prints (question 3a), then stop.
 
 ## NEXT_QUESTION=priority
 
-Ask, in the owner's language: "Every morning the paper can open with the one thing that
-matters most that day. I read it from a file on your Mac that you fill in — goals,
-deadlines, advice you trust. Want that? (yes / no)"
+Ask, in the owner's language: "Every morning the paper can open with what Patrick Salyer
+would tell you after watching your last day. What are you trying to make true over the
+next few quarters? (or 'no' to skip the advisor desk)"
 
 Stop. On their next message:
 
 - **No** → `record_setup.py <config path> priority.configured=false`
-- **Yes** → `record_setup.py <config path> priority.configured=true priority.file=~/Plow/prioritization.md`
-  then read the file once with `mcp__plow__plow_read_file` `path=~/Plow/prioritization.md`:
-  - it exists → say "Found your prioritization file."
-  - it does not exist → read
-    `/var/lib/hermes/skills/pt-setup/assets/prioritization.template.md` with `read_file`
-    and write it to the Mac with `mcp__plow__plow_write_file`
-    `path=~/Plow/prioritization.md`, content unchanged. Say: "I created
-    ~/Plow/prioritization.md — fill in your goals and the advice you trust; I read it
-    every morning."
-  - **never overwrite an existing file**, and never paste the owner's file back in chat.
+- **An answer** → first put it on the Mac. Read the file once with `mcp__plow__plow_read_file`
+  `path=~/Plow/prioritization.md`:
+  - it exists → add their answer as one `- ` line under `## Goals` unless it is already
+    there, and write it back with `mcp__plow__plow_write_file`.
+  - it does not exist → `mcp__plow__plow_write_file` `path=~/Plow/prioritization.md` with
+    exactly:
+
+        # What I'm working toward
+
+        ## Goals
+        - <their answer>
+
+        ## Not now
+
+        ## Notes
+
+  - **never overwrite an existing file**: every line already in it stays as it was. Never
+    paste the owner's file back in chat.
+  Only once the goal is in the file (written now, or already there): `record_setup.py <config path> priority.configured=true priority.file=~/Plow/prioritization.md`.
+  A denied or failed write → say so in one line and record nothing; the question stays open.
+  Say in one line that the desk reads their Mac every morning and that they can correct
+  it any time by texting ("Raj is my cousin", "stop telling me to hire").
 
 Then seed the advisor library, once:
 

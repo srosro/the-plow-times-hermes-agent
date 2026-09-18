@@ -21,9 +21,8 @@ services:
       # (os.environ.get("TZ")) -- their own error messages say "restart
       # with AGENT_TZ set", but measured live nothing in this image
       # actually translates AGENT_TZ into TZ, so TZ has to be set here
-      # itself. Owner's Mac resolves to Joinville, Brazil
-      # (America/Sao_Paulo) via pt-setup's location lookup.
-      TZ: America/Sao_Paulo
+      # itself. This fork's owner is in US Pacific time.
+      TZ: America/Los_Angeles
     volumes:
       # `.host`, not the path the agent reads: a bind carries this machine's
       # ownership in, and the image copies the file into place as root itself.

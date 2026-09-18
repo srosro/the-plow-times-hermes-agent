@@ -120,8 +120,11 @@ HTML.** Hand-write `edition.json` under the run directory:
   replaces the prose body on the printed page (`skip_body`); `headline` is
   the day's priority and `body` is the first step in prose for the chat
   edition. Shape: `why` (1–3 objects with `text` and `source_label`),
-  `first_step`, optional `not_today` (at most two strings),
-  optional `stage_label`.
+  `first_step`, optional `not_today` (at most two strings), and optional
+  `stage_label`, `stage_why`, `yesterday`, `week`, `draft` (non-blank
+  strings), `who` (at most three strings) and `today` (at most four
+  `{"time", "title", "note"}`, where `time` is the printed start such as
+  "10:00", or null for an all-day event).
 - **`forecast` is optional, weather-only, and drawn — not written.** 1-6
   day objects, each `day` (short label, e.g. "Tue"), `date` (e.g.
   "17/05"), `icon` (exactly one of `sun`, `partly-cloudy`, `cloud`,

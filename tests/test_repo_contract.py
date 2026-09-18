@@ -644,12 +644,14 @@ class TestSkills:
         text = (ROOT / "pt-setup" / "SKILL.md").read_text()
         assert "NEXT_QUESTION=priority" in text
         assert "never overwrite an existing file" in text.lower()
-        assert "prioritization.template.md" in text
+        assert "trying to make true" in text
+        assert not (ROOT / "pt-setup" / "assets" / "prioritization.template.md").exists()
 
     def test_priority_desk_is_documented_and_wired(self):
         desks = (ROOT / "pt-research" / "references" / "desks.md").read_text()
         assert "## 5. Priority" in desks
         assert "run/desk-calendar/events.json" in desks
+        assert "imessage" in desks
         skill = (ROOT / "pt-priority" / "SKILL.md").read_text()
         assert "run/desk-priority/notes.json" in skill
         assert "never infer a stage" not in desks
