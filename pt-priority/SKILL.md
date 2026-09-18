@@ -33,9 +33,11 @@ never do it.
    in history and keep it unless today's evidence plainly contradicts it; when it changes,
    the reason says what moved. Only evidence about the owner's own company counts —
    someone else's raise, pivot or news never moves it. Write one line of reason a reader
-   can check.
+   can check. A modifier the advisor defines (Fundraising) sits on top of the stage rather
+   than replacing it: when it applies, name it in the label ("Blueprint + Fundraising") and
+   read its file alongside the stage's.
 2. **Focus.** One concrete action for today that serves the advisor's `Focus first` for
-   that stage and the owner's goals, grounded in what is actually on the calendar and in
+   that stage (and modifier) and the owner's goals, grounded in what is actually on the calendar and in
    the inbox. Never "check email", "catch up", "plan the week", or a list. Never something
    in the owner's `Not now` or the advisor's `Do not focus on` for this stage.
 3. **Don't.** 0–2 things the advisor says not to do at this stage that are tempting today,
