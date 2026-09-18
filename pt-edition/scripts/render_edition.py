@@ -81,6 +81,11 @@ def pretty_date(raw):
     return f"{_MONTHS[month - 1]} {day}, {year}"
 
 
+def blank(value):
+    """True unless value is a string with something in it."""
+    return not (isinstance(value, str) and value.strip())
+
+
 def validate(edition):
     """The structural gate for edition.json; returns "; "-joined failures.
 
@@ -117,7 +122,7 @@ def validate(edition):
         if kind not in KINDS:
             failures.append(f"{where}.kind is not section|assignment")
         title = section.get("title")
-        if not (isinstance(title, str) and title.strip()):
+        if blank(title):
             failures.append(f"{where}.title is blank")
         if not isinstance(section.get("body"), str):
             failures.append(f"{where}.body is not a string")
@@ -157,9 +162,9 @@ def validate(edition):
                     if not isinstance(day, dict):
                         failures.append(f"{dwhere} is not an object")
                         continue
-                    if not (isinstance(day.get("day"), str) and day["day"].strip()):
+                    if blank(day.get("day")):
                         failures.append(f"{dwhere}.day is blank")
-                    if not (isinstance(day.get("date"), str) and day["date"].strip()):
+                    if blank(day.get("date")):
                         failures.append(f"{dwhere}.date is blank")
                     if day.get("icon") not in FORECAST_ICONS:
                         failures.append(f"{dwhere}.icon is not one of {FORECAST_ICONS}")
@@ -179,9 +184,9 @@ def validate(edition):
                     if not isinstance(item, dict):
                         failures.append(f"{iwhere} is not an object")
                         continue
-                    if not (isinstance(item.get("time"), str) and item["time"].strip()):
+                    if blank(item.get("time")):
                         failures.append(f"{iwhere}.time is blank")
-                    if not (isinstance(item.get("title"), str) and item["title"].strip()):
+                    if blank(item.get("title")):
                         failures.append(f"{iwhere}.title is blank")
                     if item.get("icon") not in SCHEDULE_ICONS:
                         failures.append(f"{iwhere}.icon is not one of {SCHEDULE_ICONS}")
@@ -197,9 +202,9 @@ def validate(edition):
                     if not isinstance(item, dict):
                         failures.append(f"{iwhere} is not an object")
                         continue
-                    if not (isinstance(item.get("sender"), str) and item["sender"].strip()):
+                    if blank(item.get("sender")):
                         failures.append(f"{iwhere}.sender is blank")
-                    if not (isinstance(item.get("subject"), str) and item["subject"].strip()):
+                    if blank(item.get("subject")):
                         failures.append(f"{iwhere}.subject is blank")
         games = section.get("games")
         if games is not None:
@@ -213,9 +218,9 @@ def validate(edition):
                     if not isinstance(item, dict):
                         failures.append(f"{gwhere} is not an object")
                         continue
-                    if not (isinstance(item.get("home"), str) and item["home"].strip()):
+                    if blank(item.get("home")):
                         failures.append(f"{gwhere}.home is blank")
-                    if not (isinstance(item.get("away"), str) and item["away"].strip()):
+                    if blank(item.get("away")):
                         failures.append(f"{gwhere}.away is blank")
                     status = item.get("status")
                     if status not in GAME_STATUSES:
@@ -244,12 +249,12 @@ def validate(edition):
                         if not isinstance(item, dict):
                             failures.append(f"{iwhere} is not an object")
                             continue
-                        if not (isinstance(item.get("text"), str) and item["text"].strip()):
+                        if blank(item.get("text")):
                             failures.append(f"{iwhere}.text is blank")
-                        if not (isinstance(item.get("source_label"), str) and item["source_label"].strip()):
+                        if blank(item.get("source_label")):
                             failures.append(f"{iwhere}.source_label is blank")
                 step = priority.get("first_step")
-                if not (isinstance(step, str) and step.strip()):
+                if blank(step):
                     failures.append(f"{where}.priority.first_step is blank")
                 tags = priority.get("tags")
                 if tags is not None and not (
@@ -263,7 +268,7 @@ def validate(edition):
                     elif len(not_today) > 2:
                         failures.append(f"{where}.priority.not_today has more than 2 items")
                 stage_label = priority.get("stage_label")
-                if stage_label is not None and not (isinstance(stage_label, str) and stage_label.strip()):
+                if stage_label is not None and blank(stage_label):
                     failures.append(f"{where}.priority.stage_label is blank")
         image = section.get("image")
         if image is not None:
