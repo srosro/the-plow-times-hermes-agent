@@ -658,8 +658,9 @@ class TestSkills:
         assert "imessage" in desks
         skill = (ROOT / "pt-priority" / "SKILL.md").read_text()
         assert "run/desk-priority/notes.json" in skill
-        assert "history.py record" in skill
         assert "never infer a stage" not in desks
+        edition = (ROOT / "pt-edition" / "SKILL.md").read_text()
+        assert "history.py record" in edition
 
     def test_shared_helpers_exist_and_are_referenced(self):
         shared = ROOT / "pt-shared" / "scripts"

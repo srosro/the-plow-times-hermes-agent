@@ -79,9 +79,7 @@ Use `write_file` for `/var/lib/hermes/pt/run/desk-priority/notes.json`:
               "not_today": ["<one thing not to do>"]}}
 ```
 
-`why` has 1–3 items, `today` at most 4, `who` at most 3, `not_today` at most 2. Then record
-the day:
+`why` has 1–3 items, `today` at most 4, `who` at most 3, `not_today` at most 2. pt-edition
+records the day in history once the paper is delivered.
 
-`/var/lib/hermes/skills/pt-priority/scripts/history.py record --date <DATE> --notes-json /var/lib/hermes/pt/run/desk-priority/notes.json`
-
-No advisor files → write `{"desk": "priority", "status": "unavailable"}` and record nothing.
+No advisor files → write `{"desk": "priority", "status": "unavailable"}`.

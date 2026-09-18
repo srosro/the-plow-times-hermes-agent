@@ -54,9 +54,9 @@ pass that found 3 of 5 sources reports 3 sources; it does not keep hunting.
 ## The loop
 
 0. **Paper batch only — standing desks first.** Follow
-   `pt-research/references/desks.md` before any news topic: location via
-   Latch, then weather in the browser; calendar today and upcoming; mail
-   only if configured. Flush each desk's notes as you go.
+   `pt-research/references/desks.md` before any news topic; it names every
+   standing desk, when it runs, and in what order. Flush each desk's notes
+   as you go.
    **Before desks, reopen news:**
    `/var/lib/hermes/skills/pt-intake/scripts/topics.py reopen-sections`
    Sections stuck at `delivered` are not "already done" — they are yesterday's
@@ -114,14 +114,9 @@ Two rules make a batch survivable in one session:
   clock by the section count. Only an assignment the owner explicitly asked
   to be "properly" done runs `deep`.
 - **Standing desks run first, every paper batch, and they are not topics.**
-  Follow `pt-research/references/desks.md`: location via Latch then
-  weather; calendar (today and upcoming); mail only if `mail.configured` is
-  true (Gmail via `plow-gog` first, Mail.app only if that fails); then
-  priority, only if `priority.configured` is true — it prints first but
-  runs last so it can read the other desks' notes, and it spends no web
-  budget. Notes at `run/desk-priority/notes.json`,
-  `run/desk-weather/notes.json`, `run/desk-calendar/notes.json`,
-  `run/desk-mail/notes.json`. Do not `topics.py mark` a desk.
+  Follow `pt-research/references/desks.md` — the one roster of which desks
+  run and in what order. Notes at `run/desk-<name>/notes.json`. Do not
+  `topics.py mark` a desk.
 - **The batch budget is global, and the per-topic budget is a slice of it.**
   Keep a running total: when the batch budget is spent, stop starting new
   topics and write down what each one got. The edition ships with what was

@@ -182,8 +182,7 @@ class TestValidate:
     def test_priority_renders_headline_why_and_first_step(self):
         p = {"why": [{"text": "Q3 goal: raise $1.5M by Sep 30",
                       "source_label": "your file, Goals"}],
-             "first_step": "Send the deck",
-             "tags": ["carried over from yesterday"]}
+             "first_step": "Send the deck"}
         html = render.render_html(edition(sections=[{
             "kind": "section", "title": "Your #1 priority today", "desk": "priority",
             "headline": "Close the seed extension", "body": "Send the deck", "priority": p,
@@ -192,7 +191,6 @@ class TestValidate:
         assert "Close the seed extension" in html
         assert "Q3 goal: raise $1.5M by Sep 30 <span class=\"src\">— your file, Goals</span>" in html
         assert "Send the deck" in html
-        assert "carried over from yesterday" in html
         assert "<script" not in html.lower()
 
     def test_priority_title_is_the_desk_title_not_python_text(self):

@@ -120,10 +120,10 @@ HTML.** Hand-write `edition.json` under the run directory:
   replaces the prose body on the printed page (`skip_body`); `headline` is
   the day's priority and `body` is the first step in prose for the chat
   edition. Shape: `why` (1–3 objects with `text` and `source_label`),
-  `first_step`, optional `tags` and `not_today` (at most two strings),
-  and optional `stage_label`, `stage_why`, `yesterday`, `week`, `draft`
-  (non-blank strings), `who` (at most three strings) and `today` (at most
-  four `{"time": "HH:MM" or null, "title", "note"}`).
+  `first_step`, optional `not_today` (at most two strings), and optional
+  `stage_label`, `stage_why`, `yesterday`, `week`, `draft` (non-blank
+  strings), `who` (at most three strings) and `today` (at most four
+  `{"time": "HH:MM" or null, "title", "note"}`).
 - **`forecast` is optional, weather-only, and drawn — not written.** 1-6
   day objects, each `day` (short label, e.g. "Tue"), `date` (e.g.
   "17/05"), `icon` (exactly one of `sun`, `partly-cloudy`, `cloud`,
@@ -314,7 +314,11 @@ transcript after it is the wall of text they did not ask for.
    would send the text a second time (or as a second message). `NO_REPLY`
    is the token the gateway already treats as silence. Never return the
    renderer’s chat output as the turn’s last line once the PDF has posted.
-3. **Mark every topic the edition carried** from its `topic_id`:
+3. **Record the priority desk** when the edition carried it (its notes say
+   `"status": "ok"`), only after the chat leg is out, so tomorrow's follow-up
+   never refers to advice that was not delivered:
+   `/var/lib/hermes/skills/pt-priority/scripts/history.py record --date <DATE> --notes-json /var/lib/hermes/pt/run/desk-priority/notes.json`
+4. **Mark every topic the edition carried** from its `topic_id`:
    `/var/lib/hermes/skills/pt-intake/scripts/topics.py mark <id> --status delivered`. Do this
    only after the chat leg is out — a delivered mark on an undelivered
    edition is how a silent gap looks like a working paper. A section then

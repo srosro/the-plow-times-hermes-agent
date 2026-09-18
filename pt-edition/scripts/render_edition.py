@@ -256,11 +256,6 @@ def validate(edition):
                 step = priority.get("first_step")
                 if blank(step):
                     failures.append(f"{where}.priority.first_step is blank")
-                tags = priority.get("tags")
-                if tags is not None and not (
-                    isinstance(tags, list) and all(isinstance(t, str) for t in tags)
-                ):
-                    failures.append(f"{where}.priority.tags is not a list of strings")
                 for key in ("stage_label", "stage_why", "yesterday", "week", "draft"):
                     if priority.get(key) is not None and blank(priority[key]):
                         failures.append(f"{where}.priority.{key} is blank")
@@ -682,10 +677,6 @@ def priority_block(priority):
         blocks.append(_note("DRAFT", priority["draft"], "priority-note priority-draft"))
     if priority.get("not_today"):
         blocks.append(_inline("NOT TODAY", priority["not_today"]))
-    tags = priority.get("tags") or []
-    if tags:
-        spans = "".join(f'<span class="tag">{html.escape(t)}</span>' for t in tags)
-        blocks.append(f'<div class="tags">{spans}</div>')
     return "\n".join(blocks)
 
 
