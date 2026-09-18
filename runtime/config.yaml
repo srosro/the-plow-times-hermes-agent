@@ -26,8 +26,7 @@ providers:
     key_env: HERMES_CUSTOM_PLOW_API_KEY
     stale_timeout_seconds: 55
     models:
-      anthropic/claude-sonnet-5:
-        prompt_caching: true
+      anthropic/claude-sonnet-5: {}
 
 # Boot recomposes SOUL.md from plow-seed; the newspaper file has to be
 # that seed or the generic Plow-assistant persona wins every start.
