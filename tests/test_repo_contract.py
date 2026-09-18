@@ -644,7 +644,12 @@ class TestSkills:
         text = (ROOT / "pt-setup" / "SKILL.md").read_text()
         assert "NEXT_QUESTION=priority" in text
         assert "never overwrite an existing file" in text.lower()
-        assert "prioritization.template.md" in text
+        assert "trying to make true" in text
+        assert not (ROOT / "pt-setup" / "assets" / "prioritization.template.md").exists()
+
+    def test_intake_routes_owner_corrections(self):
+        intake = (ROOT / "pt-intake" / "SKILL.md").read_text()
+        assert "## Not now" in intake and "priority.file" in intake
 
     def test_priority_desk_is_documented_and_wired(self):
         desks = (ROOT / "pt-research" / "references" / "desks.md").read_text()

@@ -6,10 +6,10 @@ A [Hermes](https://howto.plow.co/hermes) agent on [Plow Chat](https://howto.plow
 
 ## What it is
 
-The product is a **page**. It can open with **your #1 priority today** (from
-`~/Plow/prioritization.md`), then weather, calendar, optional mail, and the
-stories you told it to cover, laid out as a newspaper and sent to a printer
-on your Mac when one is there. The same edition can land as a PDF in the chat
+The product is a **page**. It can open with **what Patrick Salyer would tell
+you** after watching your last day, learned from your Mac, then weather,
+calendar, optional mail, and the stories you told it to cover, laid out as a
+newspaper and sent to a printer on your Mac when one is there. The same edition can land as a PDF in the chat
 if you would rather not print.
 
 You do not fill a profile. The first message is the paper: what time it should arrive. It learns your timezone from where the Mac is; it does not interview you for a name.
@@ -20,9 +20,10 @@ It reports. It does not act on what it finds: no purchases, no bookings, no logi
 
 ## What goes in the paper
 
-- **Standing desks** you can keep every day: the #1 priority (from
-  `~/Plow/prioritization.md`, created from a template on setup if you want
-  it, plus optional stage notes in `~/Plow/advisors/`), weather, calendar, mail.
+- **Standing desks** you can keep every day: the advisor's desk (your stage,
+  one focus with the people and a draft, and what not to do, read from your
+  mail, messages and calendar; there is no template to fill in, and you steer
+  it by texting corrections), weather, calendar, mail.
 - **Sections** you named (“esportes”, “the dollar”, a beat of your own), including a different paper at a different hour if you ask for one.
 - **One day’s assignment** (“put the iPhone price in tomorrow’s paper”).
 - **A one-off** you want once, on a short budget, without it becoming a standing section.
