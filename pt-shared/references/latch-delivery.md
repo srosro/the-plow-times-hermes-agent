@@ -10,10 +10,10 @@ Latch-using skill draws. The Mac authorises each action; that is the point.
 rendered HTML into a Latch tool argument killed the LLM stream and `lp`
 never ran. A later run that did reach `lp` failed because the queue
 refused HTML (`Unsupported document-format "text/html"`). `print_edition.py`
-ships sibling `edition.pdf` instead: Latch `write_file` is text, so the
-bytes ride as base64 and are decoded on the Mac before `lp`. One command:
+ships `edition.pdf` instead: Latch `write_file` is text, so the bytes ride
+as base64 and are decoded on the Mac before `lp`. One command:
 
-    /var/lib/hermes/skills/pt-print/scripts/print_edition.py /var/lib/hermes/pt/run/edition.html /var/lib/hermes/pt/config.json
+    /var/lib/hermes/skills/pt-print/scripts/print_edition.py /var/lib/hermes/pt/run/<id>/edition.pdf /var/lib/hermes/pt/config.json
 
 Inside the script, in this order and nothing else. Paths under `~/Plow`
 auto-approve on the Mac.

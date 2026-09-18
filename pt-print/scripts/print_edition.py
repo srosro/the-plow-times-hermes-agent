@@ -9,12 +9,12 @@ itself. This script is that same shape for paper.
 
 A later run that DID reach `lp` failed because the CUPS queue refused HTML
 (`Unsupported document-format "text/html"` on JornalVirtual). The file
-shipped is sibling edition.pdf. Latch write_file is text, so the PDF rides
-as base64 and is decoded on the Mac before `lp`.
+shipped is edition.pdf, the one the chat already got. Latch write_file is
+text, so the PDF rides as base64 and is decoded on the Mac before `lp`.
 
 Usage:
 
-    print_edition.py <edition.html> <config.json>
+    print_edition.py <edition.pdf> <config.json>
 
 Date comes from sibling edition.json. Skips with exit 0 when
 printer.configured is not true. Any real Latch or `lp` failure exits
@@ -62,10 +62,6 @@ def printer_name(config_path):
     return name.strip()
 
 
-def pdf_beside(html_path):
-    return str(Path(html_path).resolve().parent / "edition.pdf")
-
-
 def read_pdf(path):
     try:
         data = Path(path).read_bytes()
@@ -76,8 +72,8 @@ def read_pdf(path):
     return data
 
 
-def edition_date(html_path):
-    sibling = Path(html_path).resolve().parent / "edition.json"
+def edition_date(pdf_path):
+    sibling = Path(pdf_path).resolve().parent / "edition.json"
     try:
         data = json.loads(sibling.read_text(encoding="utf-8"))
     except (OSError, ValueError, TypeError):
@@ -209,8 +205,8 @@ def require_lp_ok(parsed):
         sys.exit(f"error: page not printed — lp {output}")
 
 
-def ship(html_path, printer, date, call_tool, sleep=time.sleep):
-    pdf = read_pdf(pdf_beside(html_path))
+def ship(pdf_path, printer, date, call_tool, sleep=time.sleep):
+    pdf = read_pdf(pdf_path)
     dest_b64 = mac_b64_path(date)
 
     def poll(handle):
@@ -354,7 +350,7 @@ def main(argv=None):
     parser = argparse.ArgumentParser(
         description="Write the edition PDF to the owner's Mac and print it."
     )
-    parser.add_argument("html")
+    parser.add_argument("pdf")
     parser.add_argument("config")
     parser.add_argument("--date", default=None)
     parser.add_argument("--dry-run", action="store_true")
@@ -364,7 +360,7 @@ def main(argv=None):
     if not printer:
         print("skipped: printer.configured is not true")
         return
-    date = args.date or edition_date(args.html)
+    date = args.date or edition_date(args.pdf)
     if args.dry_run:
         print(f"dry-run: would write {mac_pdf_path(date)} and lp -d {printer}")
         return
@@ -373,7 +369,7 @@ def main(argv=None):
     device = require("DOMO_DEVICE_UID")
     token = require("DOMO_MCP_TOKEN")
     client = LatchClient(base, device, token)
-    ship(args.html, printer, date, client.call_tool)
+    ship(args.pdf, printer, date, client.call_tool)
     print(f"page printed on {printer}")
 
 

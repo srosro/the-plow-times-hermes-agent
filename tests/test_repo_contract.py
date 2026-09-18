@@ -199,9 +199,10 @@ class TestSoul:
             for line in text.splitlines()
             if "render_edition.py" in line and line.startswith(" " * 7)
         ]
-        assert len(render) >= 2, "both the printer and no-printer commands must be spelled out"
-        for line in render:
-            assert "--pdf" in line, f"a render command without --pdf: {line}"
+        # One command, printer or not: the print ships the same PDF, so a
+        # printer-only --html variant is a choice the model can only get wrong.
+        assert len(render) == 1, render
+        assert "--pdf" in render[0] and "--html" not in render[0], render[0]
 
     def test_pdf_fallback_is_keyed_on_weasyprint_not_on_any_failure(self):
         # The fallback used to fire whenever "render_edition.py produced no
@@ -504,18 +505,6 @@ class TestSoul:
         assert "no text between tool calls" in research
         assert "happen silently" in edition
         assert "PDF rendered successfully" in edition
-
-    def test_print_skill_uses_a_container_path_for_render_not_a_mac_path(self):
-        # Measured live: pt-print's own render step told the model to pass
-        # `~/Plow/...` (a Mac path, Latch's convention) as an argument to
-        # render_edition.py, which runs INSIDE THE CONTAINER -- `~` there
-        # resolves to nothing meaningful on the owner's Mac. The render
-        # step must target a container path; ~/Plow only means something
-        # inside the actual Latch write call afterward.
-        text = (ROOT / "pt-print" / "SKILL.md").read_text()
-        render_step = text[text.index("## Render the HTML"):text.index("## Ship it through Latch")]
-        assert "--html /var/lib/hermes" in render_step
-        assert "never an argument to a" in render_step
 
     def test_print_skill_ships_html_through_print_edition_not_the_model(self):
         # Measured live 2026-09-17: the model cat'd edition.html (~43k) then

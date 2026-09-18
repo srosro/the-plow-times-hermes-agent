@@ -26,15 +26,14 @@ def _config(tmp_path, configured=True, name="HP_LaserJet"):
     return path
 
 
-def _edition(tmp_path, body="<html><body>edition</body></html>", pdf=b"%PDF-1.4 fake"):
-    html = tmp_path / "edition.html"
-    html.write_text(body, encoding="utf-8")
+def _edition(tmp_path, pdf=b"%PDF-1.4 fake"):
     (tmp_path / "edition.json").write_text(
         json.dumps({"date": "2026-09-17", "sections": []}),
         encoding="utf-8",
     )
-    (tmp_path / "edition.pdf").write_bytes(pdf)
-    return html
+    path = tmp_path / "edition.pdf"
+    path.write_bytes(pdf)
+    return path
 
 
 class TestPrinterGate:
@@ -53,17 +52,15 @@ class TestPrinterGate:
 
 class TestPdfAndDate:
     def test_missing_pdf_is_refused_by_name(self, tmp_path):
-        html = tmp_path / "edition.html"
-        html.write_text("<html></html>", encoding="utf-8")
         (tmp_path / "edition.json").write_text(
             json.dumps({"date": "2026-09-17"}), encoding="utf-8"
         )
         with pytest.raises(SystemExit, match="pdf"):
-            pe.read_pdf(pe.pdf_beside(str(html)))
+            pe.read_pdf(str(tmp_path / "edition.pdf"))
 
     def test_date_comes_from_sibling_edition_json(self, tmp_path):
-        html = _edition(tmp_path)
-        assert pe.edition_date(str(html)) == "2026-09-17"
+        pdf = _edition(tmp_path)
+        assert pe.edition_date(str(pdf)) == "2026-09-17"
 
     def test_mac_path_is_pdf_under_plow_pt(self):
         assert pe.mac_pdf_path("2026-09-17") == "~/Plow/pt/edition-2026-09-17.pdf"
@@ -110,7 +107,7 @@ class TestShip:
         # Measured live 2026-09-17: JornalVirtual rejected HTML
         # (`lp: Unsupported document-format "text/html"`). The chat leg
         # already has edition.pdf from weasyprint; paper must ship that.
-        html = _edition(tmp_path, pdf=b"%PDF-1.4 PAGE")
+        pdf = _edition(tmp_path, pdf=b"%PDF-1.4 PAGE")
         calls = []
 
         def call_tool(name, arguments):
@@ -124,7 +121,7 @@ class TestShip:
             raise AssertionError(name)
 
         pe.ship(
-            str(html),
+            str(pdf),
             "JornalVirtual",
             "2026-09-17",
             call_tool,
@@ -150,7 +147,7 @@ class TestShip:
         assert lp_args["network"] is True
 
     def test_lp_bad_file_descriptor_retries_via_applescript(self, tmp_path):
-        html = _edition(tmp_path)
+        pdf = _edition(tmp_path)
         tools = []
 
         def call_tool(name, arguments):
@@ -166,7 +163,7 @@ class TestShip:
             raise AssertionError(name)
 
         pe.ship(
-            str(html),
+            str(pdf),
             "JornalVirtual",
             "2026-09-17",
             call_tool,

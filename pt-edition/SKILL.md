@@ -1,6 +1,6 @@
 ---
 name: pt-edition
-description: Compile one or more topics' research notes into edition.json, render it with render_edition.py into printable HTML and PDF, post the PDF only via post_to_chat.py (which also runs print_edition.py when a printer is configured), end the turn with NO_REPLY, and mark the topics it carried. Runs in the cron-fired session after pt-research.
+description: Compile one or more topics' research notes into edition.json, render it with render_edition.py into the PDF, post the PDF only via post_to_chat.py (which also runs print_edition.py when a printer is configured), end the turn with NO_REPLY, and mark the topics it carried. Runs in the cron-fired session after pt-research.
 ---
 
 # pt-edition — notes become the edition
@@ -235,22 +235,15 @@ transcript after it is the wall of text they did not ask for.
 
 ## Render and deliver
 
-1. Run the renderer — it is the only thing that writes the edition. Two
-   complete commands; **copy the one that matches and change only the
-   paths.** Do not build a third by merging them, and do not add flags
-   that are not here:
-
-   No printer configured:
+1. Run the renderer — it is the only thing that writes the edition. One
+   complete command, printer or not; **copy it and change only the
+   paths.** Do not add flags that are not here:
 
        /var/lib/hermes/skills/pt-edition/scripts/render_edition.py <edition.json> --pdf run/<id>/edition.pdf
 
-   Printer configured:
-
-       /var/lib/hermes/skills/pt-edition/scripts/render_edition.py <edition.json> --pdf run/<id>/edition.pdf --html run/<id>/edition.html
-
-   `--pdf` is in both, always. `--chat PATH` is optional and takes a path
-   when used; the chat transcript is not posted, so you normally leave it
-   out entirely.
+   The printed page is this same PDF. `--chat PATH` is optional and takes
+   a path when used; the chat transcript is not posted, so you normally
+   leave it out entirely.
 
    **Then check that `run/<id>/edition.pdf` actually exists before step 2.**
    If it does not, read the renderer's own stderr and act on which failure
@@ -295,7 +288,7 @@ transcript after it is the wall of text they did not ask for.
    process environment already; nothing to pass for those.
 
    A successful `--pdf` POST then runs `print_edition.py` itself when
-   `printer.configured` is true (sibling `edition.html`, same run dir). Do
+   `printer.configured` is true (the same PDF, nothing else to render). Do
    **not** call `pt-print` or `print_edition.py` after this — measured live,
    the model posted the PDF and skipped the print script. A print failure
    prints `page not printed — …` on stdout and still leaves the chat

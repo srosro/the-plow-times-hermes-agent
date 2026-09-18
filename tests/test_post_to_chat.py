@@ -94,20 +94,8 @@ class TestMaybePrint:
     not a gate for paper; post_to_chat.py is.
     """
 
-    def test_html_is_the_pdf_sibling(self, tmp_path):
-        pdf = tmp_path / "run" / "edition.pdf"
-        assert post.html_beside(str(pdf)) == str(pdf.parent / "edition.html")
-
-    def test_no_html_is_a_skip(self, tmp_path):
-        pdf = tmp_path / "edition.pdf"
-        pdf.write_bytes(b"%PDF")
-        called = []
-        assert "skipped" in post.maybe_print(str(pdf), str(tmp_path / "nope.json"), runner=called.append)
-        assert called == []
-
     def test_unconfigured_printer_does_not_call_the_runner(self, tmp_path):
         (tmp_path / "edition.pdf").write_bytes(b"%PDF")
-        (tmp_path / "edition.html").write_text("<html></html>", encoding="utf-8")
         cfg = tmp_path / "config.json"
         cfg.write_text(
             json.dumps({"printer": {"configured": False, "name": None}}),
@@ -118,11 +106,11 @@ class TestMaybePrint:
         assert "skipped" in out
         assert called == []
 
-    def test_configured_printer_runs_print_edition_with_the_html(self, tmp_path):
+    def test_configured_printer_prints_the_pdf_with_no_html_beside_it(self, tmp_path):
+        # Measured live 2026-09-18: runs that rendered only the PDF logged
+        # "skipped: no html" -- a gate on a file the print never reads.
         pdf = tmp_path / "edition.pdf"
-        html = tmp_path / "edition.html"
         pdf.write_bytes(b"%PDF")
-        html.write_text("<html></html>", encoding="utf-8")
         cfg = tmp_path / "config.json"
         cfg.write_text(
             json.dumps({"printer": {"configured": True, "name": "JornalVirtual"}}),
@@ -130,17 +118,16 @@ class TestMaybePrint:
         )
         seen = []
 
-        def runner(html_path, config_path):
-            seen.append((html_path, config_path))
+        def runner(pdf_path, config_path):
+            seen.append((pdf_path, config_path))
             return "page printed on JornalVirtual"
 
         out = post.maybe_print(str(pdf), str(cfg), runner=runner)
-        assert seen == [(str(html.resolve()), str(cfg))]
+        assert seen == [(str(pdf.resolve()), str(cfg))]
         assert "page printed" in out
 
     def test_a_print_failure_does_not_undo_the_chat_post(self, tmp_path):
         pdf = tmp_path / "edition.pdf"
-        (tmp_path / "edition.html").write_text("<html></html>", encoding="utf-8")
         pdf.write_bytes(b"%PDF")
         cfg = tmp_path / "config.json"
         cfg.write_text(
@@ -148,7 +135,7 @@ class TestMaybePrint:
             encoding="utf-8",
         )
 
-        def runner(html_path, config_path):
+        def runner(pdf_path, config_path):
             raise SystemExit("error: page not printed — lp 1")
 
         out = post.maybe_print(str(pdf), str(cfg), runner=runner)
