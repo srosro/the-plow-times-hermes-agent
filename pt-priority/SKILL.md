@@ -12,7 +12,7 @@ what you write, and a wrong shape fails the edition loudly.
 
 ## Read
 
-- `run/desk-priority/advisors/*.md` — the advisor's files. Each has frontmatter
+- `run/desk-priority/advisors.json` — the advisor's files, `{"files": [{"name", "text"}]}`. Each has frontmatter
   (`advisor`, `stages`) and sections such as `Signals`, `Focus first`, `Do not focus on`.
   A file with `stages: any` applies at every stage.
 - `run/desk-priority/file.md` — the owner's own notes (`Goals`, `Not now`, `Notes`), when
@@ -44,8 +44,10 @@ or a stage change. Only the owner's notes file can do that.
 3. **Today.** Up to 4 of today's events that matter, each with a short `note` — a customer
    call gets "Go in with: <the one thing to learn>". `time` is the event's start, `null`
    for an all-day event.
-4. **This week.** One line counting the owner's customer conversations in the last 7 days
-   (calendar, mail and messages) against the advisor's bar for this stage.
+4. **This week.** One line counting the owner's customer conversations over the last 7 days
+   against the advisor's bar for this stage: the ones in today's gathers plus the ones the
+   last six days of history recorded (`yesterday`, `today`). When history covers fewer
+   days, say how many.
 5. **Focus.** One concrete action for today that serves the advisor's `Focus first` for
    that stage and the owner's goals, grounded in what is actually on the calendar and in
    the inbox. Never "check email", "catch up", "plan the week", or a list. Never something

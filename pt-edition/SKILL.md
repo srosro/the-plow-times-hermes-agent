@@ -123,7 +123,8 @@ HTML.** Hand-write `edition.json` under the run directory:
   `first_step`, optional `not_today` (at most two strings), and optional
   `stage_label`, `stage_why`, `yesterday`, `week`, `draft` (non-blank
   strings), `who` (at most three strings) and `today` (at most four
-  `{"time": "HH:MM" or null, "title", "note"}`).
+  `{"time", "title", "note"}`, where `time` is the printed start such as
+  "10:00", or null for an all-day event).
 - **`forecast` is optional, weather-only, and drawn — not written.** 1-6
   day objects, each `day` (short label, e.g. "Tue"), `date` (e.g.
   "17/05"), `icon` (exactly one of `sun`, `partly-cloudy`, `cloud`,
