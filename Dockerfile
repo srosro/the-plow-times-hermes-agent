@@ -14,18 +14,6 @@
 # under a running agent that holds live credentials. Bump both together.
 FROM public.ecr.aws/e1h7x4a2/plow-cloud-agents:base-51f83158a70a383f03a4d03dbd8b6ea102cf0361@sha256:253d7ed3409effa7fa59113d93b4b79bb731d8264cdaf4cd60294924d0110a2e
 
-# Boot recopies /opt/hermes/plow-seed/config.yaml over the agent home on
-# every start. The base pins anthropic/claude-sonnet-5 there; writing
-# runtime/config.yaml into /var/lib/hermes is not enough, because that
-# file is replaced from this seed. Same two-line swap as the fleet seed
-# (model.default and providers.plow.models).
-RUN sed -i \
-      -e 's|^  default: anthropic/claude-sonnet-5$|  default: moonshotai/kimi-k2.5|' \
-      -e 's|^      anthropic/claude-sonnet-5: {}$|      moonshotai/kimi-k2.5: {}|' \
-      /opt/hermes/plow-seed/config.yaml \
- && grep -q 'default: moonshotai/kimi-k2.5' /opt/hermes/plow-seed/config.yaml \
- && grep -q 'moonshotai/kimi-k2.5: {}' /opt/hermes/plow-seed/config.yaml
-
 # Boot also recomposes $HOME/SOUL.md from this seed. COPY to the home is
 # shadowed by the volume and then overwritten; the newspaper identity has
 # to live here or the generic "Plow assistant" seed wins.

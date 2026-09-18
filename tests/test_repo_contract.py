@@ -764,9 +764,7 @@ class TestDeployment:
         assert "interim_assistant_messages: false" in config
         assert "tool_progress: off" in config
         assert "long_running_notifications: false" in config
-        assert "moonshotai/kimi-k2.5" in config
-        assert "default: moonshotai/kimi-k2.5" in config
-        assert "moonshotai/kimi-k2.5: {}" in config
+        assert "default: anthropic/claude-sonnet-5" in config
 
     def test_compose_yml_is_the_plow_agents_surface(self):
         # plow-agents' compose.example.yml: service `agent`, credential drop-in,
@@ -814,10 +812,6 @@ class TestDeployment:
         assert "COPY runtime/SOUL.md /var/lib/hermes/SOUL.md" in dockerfile
         assert "COPY runtime/SOUL.md /opt/hermes/plow-seed/SOUL.md" in dockerfile
         assert "COPY runtime/USER.md /var/lib/hermes/memories/USER.md" in dockerfile
-        # Boot recopies plow-seed over home; Sonnet lives there, not only in
-        # runtime/config.yaml.
-        assert "plow-seed/config.yaml" in dockerfile
-        assert "moonshotai/kimi-k2.5" in dockerfile
         assert "02-copy-plow-credentials" in dockerfile
         assert "plow-credentials" in (ROOT / ".dockerignore").read_text()
         assert "plow-credentials" in (ROOT / ".gitignore").read_text()

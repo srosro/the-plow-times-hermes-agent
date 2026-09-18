@@ -3,16 +3,19 @@
 # are deliberately absent, so the pinned image supplies its current defaults
 # rather than a frozen snapshot of them.
 #
-# Default model is Kimi K2.5 on the Plow provider — the same OpenAI-compat
+# Default model is Claude Sonnet 5 on the Plow provider — the same OpenAI-compat
 # path this agent already authenticates with. The id has to be listed under
 # providers.plow.models too (fleet seed: image/seed/config.yaml), not only
 # as model.default, or Hermes keeps offering the previous catalog entry.
+# Measured live on this fork: Kimi K2.5 ran the daily paper out of order,
+# invented the date, and skipped the advisor desk's skill; Sonnet 5 is what the
+# paper ran on before the pin appeared.
 #
 # No group_sessions_per_user override at MVP scope: this agent has one private
 # chat and no groups (design doc §3.2), so the image default is fine.
 
 model:
-  default: moonshotai/kimi-k2.5
+  default: anthropic/claude-sonnet-5
   provider: plow
   base_url: "${PLOW_API_BASE}/v1"
   key_env: HERMES_CUSTOM_PLOW_API_KEY
@@ -23,7 +26,8 @@ providers:
     key_env: HERMES_CUSTOM_PLOW_API_KEY
     stale_timeout_seconds: 55
     models:
-      moonshotai/kimi-k2.5: {}
+      anthropic/claude-sonnet-5:
+        prompt_caching: true
 
 # Boot recomposes SOUL.md from plow-seed; the newspaper file has to be
 # that seed or the generic Plow-assistant persona wins every start.
