@@ -198,8 +198,9 @@ HTML.** Hand-write `edition.json` under the run directory:
   a news topic on the weather desk to make it look important.
 - **Pagination is the renderer's job.** News that does not fit one Letter
   sheet continues on page 2+ of the PDF (WeasyPrint, `column-fill: auto`).
-  Each desk box stays whole; if the rail itself overflows, the next desk
-  starts on the following page. Never hand-split copy across pages.
+  Each boxed desk stays whole; if the rail itself overflows, the next desk
+  starts on the following page. The priority card may continue onto page 2.
+  Never hand-split copy across pages.
 - **`location` is this run's city** from the Latch location step, a string,
   optional. It is the dateline, not a stored profile: if location failed,
   omit the field.
