@@ -1,9 +1,0 @@
-{
-  "date": "2026-09-16",
-  "events": [
-    {"start": "08:00", "end": "10:00", "title": "Block A", "all_day": false, "tomorrow": false},
-    {"start": "10:00", "end": "12:30", "title": "Block B", "all_day": false, "tomorrow": false},
-    {"start": "12:30", "end": "15:00", "title": "Block C", "all_day": false, "tomorrow": false},
-    {"start": "15:00", "end": "19:00", "title": "Block D", "all_day": false, "tomorrow": false}
-  ]
-}

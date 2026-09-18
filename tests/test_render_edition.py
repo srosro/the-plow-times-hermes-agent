@@ -170,27 +170,18 @@ class TestValidate:
             "kind": "section", "title": "P", "desk": "priority", "body": "b", "priority": p,
         }]))
 
-    def test_priority_block_must_be_hhmm(self):
-        p = {"why": [{"text": "t", "source_label": "calendar"}], "first_step": "x",
-             "block": {"start": "9am", "end": "11:30"}}
-        assert "priority.block is not HH:MM" in render.validate(edition(sections=[{
-            "kind": "section", "title": "P", "desk": "priority", "body": "b", "priority": p,
-        }]))
-
     def test_priority_renders_headline_why_and_first_step(self):
-        p = {"why": [{"text": "Q3 goal", "quote": "raise $1.5M by Sep 30",
+        p = {"why": [{"text": "Q3 goal: raise $1.5M by Sep 30",
                       "source_label": "your file, Goals"}],
-             "first_step": "Send the deck", "block": {"start": "09:00", "end": "11:30"},
-             "tags": ["carried over from yesterday"]}
+             "first_step": "Send the deck"}
         html = render.render_html(edition(sections=[{
             "kind": "section", "title": "Your #1 priority today", "desk": "priority",
             "headline": "Close the seed extension", "body": "Send the deck", "priority": p,
             "sources": [],
         }]), render.DEFAULT_MASTHEAD, "{{PRIORITY}}")
         assert "Close the seed extension" in html
-        assert "“raise $1.5M by Sep 30” — your file, Goals" in html
-        assert "Send the deck" in html and "09:00–11:30" in html
-        assert "carried over from yesterday" in html
+        assert "Q3 goal: raise $1.5M by Sep 30 <span class=\"src\">— your file, Goals</span>" in html
+        assert "Send the deck" in html
         assert "<script" not in html.lower()
 
     def test_priority_title_is_the_desk_title_not_python_text(self):
@@ -268,14 +259,6 @@ class TestValidate:
         ]), render.DEFAULT_MASTHEAD, "{{DESKS_INLINE}}")
         assert '<div class="desks-row">' in html
         assert html.count('<div class="desks-cell">') == 2
-
-    def test_priority_quote_has_a_word_cap(self):
-        p = {"why": [{"text": "t", "quote": " ".join(["word"] * 26), "source_label": "x"}],
-             "first_step": "x"}
-        assert "priority.why[0].quote is longer than 25 words" in render.validate(
-            edition(sections=[{
-                "kind": "section", "title": "P", "desk": "priority", "body": "b", "priority": p,
-            }]))
 
     def test_priority_not_today_is_at_most_two_strings(self):
         p = {"why": [{"text": "t", "source_label": "calendar"}], "first_step": "x",

@@ -280,19 +280,3 @@ goes back to `pending` after delivery, awaiting the next fire. An assignment
 is terminal once delivered. Never mark a topic delivered yourself in the
 intake turn — nothing has been delivered yet, and a delivered mark on a topic
 whose edition failed is how a silent gap looks like a working paper.
-
-## The priority desk's three commands
-
-Only when `pt/config.json` has `"priority": { "configured": true }`. None of
-these decide a new priority.
-
-| The owner says | Do |
-| --- | --- |
-| done / feito | `/var/lib/hermes/skills/pt-priority/scripts/history.py set --date <today> --status done` |
-| skip / hoje não | the same with `--status skipped` |
-| why? / por quê? | read `run/desk-priority/priority.json` with `read_file` and explain with the `why` items already there — do not decide again, do not add reasons |
-
-`STATUS:no-priority-today` → "No priority in today's paper yet." `TODAY:none` the same.
-Asking to change the prioritization file → `record_setup.py … priority.file=<new path>`
-then the close path `pt-setup` already uses.
-

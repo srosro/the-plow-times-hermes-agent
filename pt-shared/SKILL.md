@@ -51,44 +51,10 @@ does not, and every run fails on the import.
   `chat_status.py --soon` once before research; `chat_status.py --wait`
   after desks/topics (no-ops until a few minutes have passed, then posts
   once). Cron never calls it.
-- `scripts/textnorm.py` — library only (imported by `pt-priority` history and
-  validation). Normalizes owner text so quotes and similar priorities compare
-  without punctuation; never invoked as a CLI.
-- `pt-priority/scripts/parse_priority_file.py` — split the owner's
-  prioritization file into typed sections. Called bare:
-  `/var/lib/hermes/skills/pt-priority/scripts/parse_priority_file.py <raw.md> <out.json>`
-  Prints `FILE:<ok|missing|empty> SECTIONS:<n>`. A missing raw file is status
-  `missing`, never a crash.
-- `pt-priority/scripts/day_shape.py` — today's free windows from the calendar
-  desk's `events.json`. Called bare:
-  `/var/lib/hermes/skills/pt-priority/scripts/day_shape.py free-blocks <events.json> <out.json> --tz <IANA> [--now <ISO8601>]`
-  Prints `DAY:ok BLOCKS:<n>` or `DAY:invalid` followed by one failure per line.
-- `pt-priority/scripts/build_context.py` — assemble `run/desk-priority/context.json`
-  from the parsed file, calendar events, free blocks and recent history. Called
-  bare:
-  `/var/lib/hermes/skills/pt-priority/scripts/build_context.py --run-dir <dir> --tz <IANA> [--now <ISO8601>]`
-  Prints `CONTEXT:ok STAGE:<stage> NOTES:<list|none>` or `CONTEXT:nothing`.
-- `pt-priority/scripts/validate_priority.py` — refuse a priority the owner could
-  not trace to their file or calendar. Called bare:
-  `/var/lib/hermes/skills/pt-priority/scripts/validate_priority.py --run-dir <dir>`
-  Prints `VALID` (and stamps notes into `priority.json`) or `INVALID` followed
-  by one error per line.
-- `pt-priority/scripts/history.py` — recent priorities and whether they got
-  done. Called bare:
-  `/var/lib/hermes/skills/pt-priority/scripts/history.py today --date YYYY-MM-DD`
-  `/var/lib/hermes/skills/pt-priority/scripts/history.py record --date YYYY-MM-DD --priority-json <priority.json>`
-  `/var/lib/hermes/skills/pt-priority/scripts/history.py set --date YYYY-MM-DD --status done|skipped`
-  Prints `TODAY:…`, `RECORDED`, or `STATUS:…`.
-- `pt-priority/scripts/parse_advisors.py` — type the advisor library the desk
-  gathered. Called bare:
-  `/var/lib/hermes/skills/pt-priority/scripts/parse_advisors.py <dir-listing.json> <out.json>`
-  The listing is `{"files":[{"name","text"}]}`. Prints `ADVISORS:<n> ERRORS:<n>`.
-  README.md and files with no frontmatter are skipped. Frontmatter without
-  an advisor is an error, never a crash.
-- `pt-priority/scripts/infer_stage.py` — company stage from the parsed
-  prioritization file. Called bare:
-  `/var/lib/hermes/skills/pt-priority/scripts/infer_stage.py <file.json> <out.json>`
-  Prints `STAGE:<stage> MODIFIERS:<list|none>`. Never infer a stage by hand.
+- `pt-priority/scripts/history.py` — what the priority desk printed on recent
+  days, so the next morning can follow up. Called bare:
+  `/var/lib/hermes/skills/pt-priority/scripts/history.py record --date YYYY-MM-DD --notes-json <notes.json>`
+  Prints `RECORDED`.
 - `scripts/run_lock.py` — one exclusive run per name with stale takeover, so
   two daily-paper runs can never race and deliver a hollow edition.
   Called bare, never through an interpreter:

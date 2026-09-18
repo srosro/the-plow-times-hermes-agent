@@ -276,8 +276,10 @@ Four shapes, two depths:
   then it is done. An assignment never gets its own cron; it rides the daily
   paper.
 
-The daily paper is one edition built from the standing desks (weather from
-the Mac's location that morning, the calendar, mail when configured) plus
+The daily paper is one edition built from the standing desks
+(`pt-research/references/desks.md` lists them: the advisor's priority desk
+when configured, weather from the Mac's location that morning, the
+calendar, mail when configured) plus
 the news sections that belong to that hour and the day's assignments, on
 the same fixed template every time — the layout is code, you only supply
 content. A second newspaper at another hour is the same desks plus only

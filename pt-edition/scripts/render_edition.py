@@ -62,7 +62,6 @@ FORECAST_ICONS = ("sun", "partly-cloudy", "cloud", "rain", "storm", "snow")
 # is, drawn from CALENDAR_ICONS, never free text.
 SCHEDULE_ICONS = ("meeting", "call", "task", "reminder", "note")
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
-HHMM_RE = re.compile(r"^([01][0-9]|2[0-3]):[0-5][0-9]$")
 TOPIC_ID_RE = re.compile(r"^t_[0-9a-f]{4}$")
 TEMPLATE = pathlib.Path(__file__).resolve().parent.parent / "template.html"
 
@@ -249,28 +248,9 @@ def validate(edition):
                             failures.append(f"{iwhere}.text is blank")
                         if not (isinstance(item.get("source_label"), str) and item["source_label"].strip()):
                             failures.append(f"{iwhere}.source_label is blank")
-                        quote = item.get("quote")
-                        if quote is not None:
-                            if not isinstance(quote, str):
-                                failures.append(f"{iwhere}.quote is not a string")
-                            elif len(quote.split()) > 25:
-                                failures.append(f"{iwhere}.quote is longer than 25 words")
                 step = priority.get("first_step")
                 if not (isinstance(step, str) and step.strip()):
                     failures.append(f"{where}.priority.first_step is blank")
-                block = priority.get("block")
-                if block is not None:
-                    if not (isinstance(block, dict)
-                            and isinstance(block.get("start"), str)
-                            and isinstance(block.get("end"), str)
-                            and HHMM_RE.fullmatch(block["start"])
-                            and HHMM_RE.fullmatch(block["end"])):
-                        failures.append(f"{where}.priority.block is not HH:MM")
-                tags = priority.get("tags")
-                if tags is not None and not (
-                    isinstance(tags, list) and all(isinstance(t, str) for t in tags)
-                ):
-                    failures.append(f"{where}.priority.tags is not a list of strings")
                 not_today = priority.get("not_today")
                 if not_today is not None:
                     if not (isinstance(not_today, list) and all(isinstance(t, str) for t in not_today)):
@@ -626,7 +606,7 @@ def messages_list(items):
 
 
 def priority_block(priority):
-    """The priority desk's structured block: first step, sourced why, optional window."""
+    """The priority desk's structured block: first step, sourced why, what not to do."""
     blocks = [
         f'<p class="priority-step">→ {html.escape(priority["first_step"].strip())}</p>'
     ]
@@ -634,26 +614,12 @@ def priority_block(priority):
     for item in priority["why"]:
         text = html.escape(str(item.get("text") or "").strip())
         label = html.escape(str(item.get("source_label") or "").strip())
-        quote = str(item.get("quote") or "").strip()
-        if quote:
-            src = f'<span class="src">“{html.escape(quote)}” — {label}</span>'
-        else:
-            src = f'<span class="src">— {label}</span>'
-        items.append(f"<li>{text} {src}</li>")
+        items.append(f'<li>{text} <span class="src">— {label}</span></li>')
     blocks.append('<ul class="priority-why">' + "".join(items) + "</ul>")
-    block = priority.get("block")
-    if isinstance(block, dict) and block.get("start") and block.get("end"):
-        start = html.escape(str(block["start"]))
-        end = html.escape(str(block["end"]))
-        blocks.append(f'<p class="priority-window">{start}–{end}</p>')
     not_today = [t for t in (priority.get("not_today") or []) if str(t).strip()]
     if not_today:
         items = "".join(f"<li>{html.escape(str(t).strip())}</li>" for t in not_today[:2])
         blocks.append("<h3>NOT TODAY</h3><ul class=\"priority-avoid\">" + items + "</ul>")
-    tags = priority.get("tags") or []
-    if tags:
-        spans = "".join(f'<span class="tag">{html.escape(t)}</span>' for t in tags)
-        blocks.append(f'<div class="tags">{spans}</div>')
     return "\n".join(blocks)
 
 

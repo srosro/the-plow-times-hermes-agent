@@ -648,16 +648,13 @@ class TestSkills:
 
     def test_priority_desk_is_documented_and_wired(self):
         desks = (ROOT / "pt-research" / "references" / "desks.md").read_text()
-        assert "## 0. Priority" in desks
+        assert "## 5. Priority" in desks
         assert "run/desk-calendar/events.json" in desks
         skill = (ROOT / "pt-priority" / "SKILL.md").read_text()
         assert "run/desk-priority/notes.json" in skill
-        assert "--run-dir run/desk-priority" in skill
-
-    def test_intake_routes_the_priority_commands(self):
-        text = (ROOT / "pt-intake" / "SKILL.md").read_text()
-        for needle in ("--status done", "--status skipped", "run/desk-priority/priority.json"):
-            assert needle in text
+        assert "never infer a stage" not in desks
+        edition = (ROOT / "pt-edition" / "SKILL.md").read_text()
+        assert "history.py record" in edition
 
     def test_shared_helpers_exist_and_are_referenced(self):
         shared = ROOT / "pt-shared" / "scripts"

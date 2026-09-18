@@ -11,11 +11,9 @@ Needs Latch on the Mac. Until a human run, **NEEDS HUMAN RUN**.
 | 3 | Fill the file: company state, goals, 1 deadline, 3 pieces of advice, one rule | — |
 | 4 | Check `pt/config.json` | `priority.configured: true`, `priority.file` |
 | 5 | Force the edition (`hermes cron run pt-daily-edition`) | The page opens with the priority; the "why" cites the file and the calendar |
-| 6 | Check `run/desk-calendar/events.json`, `stage.json`, `advisors.json` and `context.json` | Shapes from the plan; `STAGE:` matches `## Company state`; only this stage's advisors in context |
-| 6b | Check the page | Line `STAGE · …`, a why citing the advisor, `NOT TODAY` block |
-| 6c | Change `## Company state` to ARR $14M and run again | Stage becomes Scale; priority and `NOT TODAY` switch advisor files |
-| 6d | Delete `~/Plow/advisors/` and run | Paper still ships; priority from file + calendar; note `no_advisor_for_stage` |
-| 7 | "why?" in chat | Explains with the quotes, does not decide again |
-| 8 | "done" | Confirms; the next day the priority does not repeat without a reason |
-| 9 | Rename the file on the Mac and run again | Page ships without the priority block (or with the notice); the rest of the paper is normal |
-| 10 | Close Latch and run | Desk marks `unavailable`; the paper is still delivered |
+| 6 | Check `run/desk-priority/advisors/` and `notes.json` | The advisor files copied raw; the notes carry a stage label, the stage's one-line reason as the first "why", a focus, and `NOT TODAY` |
+| 6b | Tell the notes file the company is now at $14M ARR and run again | The stage moves to Scale and the reason says what moved |
+| 6c | Delete `~/Plow/advisors/` and run | The desk is `unavailable`; the rest of the paper still ships |
+| 7 | Read `pt/history.json` after the paper is delivered | Today's desk is recorded; nothing is recorded for a paper that failed to deliver |
+| 8 | Rename the file on the Mac and run again | Page ships without the priority block (or with the notice); the rest of the paper is normal |
+| 9 | Close Latch and run | Desk marks `unavailable`; the paper is still delivered |
