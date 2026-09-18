@@ -254,7 +254,7 @@ so no earlier run's copy can ever be read as today's.
    its all-chat gather exactly as it says (read-only, `-readonly`, the absolute store path it
    gives), keep the rows since this time yesterday, and decode each body the way the skill
    says. A deny or an error is one blocked source: note it, do not retry, go on.
-4. Mail bodies, only when §3 read Gmail this run: pick at most 3 messages from that search
+4. Mail bodies, only when the mail desk (§3) read Gmail this run: pick at most 3 messages from that search
    the desk is likely to act on (someone to reply to or book) and read each with
    `plow-gog gmail get`, exactly as the Mac's `google-workspace` skill says
    (`mcp__plow__plow_read_skill` `name=google-workspace`; it is the skill that documents
