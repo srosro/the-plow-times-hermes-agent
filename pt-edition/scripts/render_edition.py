@@ -833,7 +833,9 @@ def html_section(section, drop_cap=False, body_cols=1):
         else:
             tag_html = f' <span class="tag">{html.escape(tag)}</span>'
     classes = ["section"]
-    if desk != "news":
+    if desk == "priority":
+        classes.append("section--priority")
+    elif desk != "news":
         classes.append("section--desk")
         classes.append(f"section--{desk}")
     elif section.get("layout") == "sidebar":

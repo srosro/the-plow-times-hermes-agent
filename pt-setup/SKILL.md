@@ -328,8 +328,8 @@ next few quarters? (or 'no' to skip the advisor desk)"
 Stop. On their next message:
 
 - **No** → `record_setup.py <config path> priority.configured=false`
-- **An answer** → `record_setup.py <config path> priority.configured=true priority.file=~/Plow/prioritization.md`
-  then read the file once with `mcp__plow__plow_read_file` `path=~/Plow/prioritization.md`:
+- **An answer** → first put it on the Mac. Read the file once with `mcp__plow__plow_read_file`
+  `path=~/Plow/prioritization.md`:
   - it exists → add their answer as one `- ` line under `## Goals` unless it is already
     there, and write it back with `mcp__plow__plow_write_file`.
   - it does not exist → `mcp__plow__plow_write_file` `path=~/Plow/prioritization.md` with
@@ -346,6 +346,8 @@ Stop. On their next message:
 
   - **never overwrite an existing file**: every line already in it stays as it was. Never
     paste the owner's file back in chat.
+  Only once that write succeeds: `record_setup.py <config path> priority.configured=true priority.file=~/Plow/prioritization.md`.
+  A denied or failed write → say so in one line and record nothing; the question stays open.
   Say in one line that the desk reads their Mac every morning and that they can correct
   it any time by texting ("Raj is my cousin", "stop telling me to hire").
 
