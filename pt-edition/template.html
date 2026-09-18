@@ -200,7 +200,7 @@
   .section--priority h2 .desk-icon {
     display: inline-block; vertical-align: -2px; margin-right: 7px;
   }
-  .priority-stage {
+  .section--priority .priority-stage {
     margin: 12px 24px 2px; padding: 0;
     font-size: 9.5px; letter-spacing: 1.8px; text-transform: uppercase;
     color: var(--ink-soft); text-align: center;
@@ -212,7 +212,7 @@
     margin: 4px 0 10px; padding: 0 24px;
     border-bottom: none;
   }
-  .priority-step {
+  .section--priority .priority-step {
     margin: 0 24px 12px; padding: 8px 0;
     border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline);
     font-weight: 700; font-size: 13px; text-align: center; color: var(--ink);
@@ -243,14 +243,6 @@
   }
   .priority-inline li { display: inline; }
   .priority-inline li + li::before { content: "  \00b7  "; }
-  /* The generic desk bullet markers are for the boxed departments below;
-     the priority box centers its prose and carries no bullets. */
-  .section--priority p:not(.headline):not(.sources):not(.unsourced) {
-    padding-left: 0; margin-left: 0;
-  }
-  .section--priority p:not(.headline):not(.sources):not(.unsourced)::before {
-    content: none;
-  }
   .section--priority .sources,
   .section--priority .unsourced { padding: 0 11px 10px; text-align: center; }
 
@@ -359,7 +351,7 @@
   .section--desk .headline,
   .section--desk .sources,
   .section--desk .unsourced { padding: 0 10px; }
-  .section--desk .headline {
+  .section--desk:not(.section--priority) .headline {
     margin: 8px 0; color: var(--ink-soft); line-height: 1.4;
     font-size: 10.5px;
     padding-bottom: 8px; border-bottom: 1px solid var(--hairline);
@@ -368,14 +360,15 @@
   .section--desk .sources,
   .section--desk .unsourced { padding-bottom: 9px; margin-top: 4px; font-size: 8px; }
 
-  /* Each paragraph in a desk reads as one bullet item -- a meeting, a
-     message, a day's forecast -- not one dense run-on sentence. */
-  .section--desk p:not(.headline):not(.sources):not(.unsourced) {
+  /* Each paragraph in a boxed desk reads as one bullet item -- a meeting,
+     a message, a day's forecast -- not one dense run-on sentence. The
+     priority box centers its own prose instead. */
+  .section--desk:not(.section--priority) p:not(.headline):not(.sources):not(.unsourced) {
     position: relative;
     margin: 0 0 9px; padding: 0 10px 0 18px;
     font-size: 10px; line-height: 1.5; text-align: left;
   }
-  .section--desk p:not(.headline):not(.sources):not(.unsourced)::before {
+  .section--desk:not(.section--priority) p:not(.headline):not(.sources):not(.unsourced)::before {
     content: "\2022"; position: absolute; left: 9px; top: 0;
     color: var(--accent-soft); font-size: 12px; line-height: 1;
   }
