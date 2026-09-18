@@ -20,6 +20,15 @@ def edition_with_priority_and_weather():
     ])
 
 
+EVENT = {"time": "10:00", "title": "Customer call: Dana", "note": "Go in with: what they use today"}
+
+
+def priority_edition(**fields):
+    p = {"why": [{"text": "t", "source_label": "calendar"}], "first_step": "x", **fields}
+    return edition(sections=[{"kind": "section", "title": "P", "desk": "priority",
+                              "body": "b", "priority": p, "sources": []}])
+
+
 def edition(**overrides):
     base = {
         "date": "2026-09-11",
@@ -262,22 +271,50 @@ class TestValidate:
         assert '<div class="desks-row">' in html
         assert html.count('<div class="desks-cell">') == 2
 
-    def test_priority_not_today_is_at_most_two_strings(self):
-        p = {"why": [{"text": "t", "source_label": "calendar"}], "first_step": "x",
-             "not_today": ["a", "b", "c"]}
-        assert "priority.not_today has more than 2 items" in render.validate(
-            edition(sections=[{
-                "kind": "section", "title": "P", "desk": "priority", "body": "b", "priority": p,
-            }]))
+    @pytest.mark.parametrize("field, value, failure", [
+        ("stage_label", " ", "priority.stage_label is blank"),
+        ("stage_why", "", "priority.stage_why is blank"),
+        ("yesterday", 3, "priority.yesterday is blank"),
+        ("week", "  ", "priority.week is blank"),
+        ("draft", ["Hey Raj"], "priority.draft is blank"),
+        ("not_today", ["a", "b", "c"], "priority.not_today has more than 2 items"),
+        ("not_today", [" "], "priority.not_today is not a list of non-blank strings"),
+        ("who", "Raj", "priority.who is not a list of non-blank strings"),
+        ("who", ["a", "b", "c", "d"], "priority.who has more than 3 items"),
+        ("today", EVENT, "priority.today is not a list"),
+        ("today", [EVENT] * 5, "priority.today has more than 4 items"),
+        ("today", ["10:00 call"], "priority.today[0] is not an object"),
+        ("today", [{**EVENT, "time": ""}], "priority.today[0].time is blank"),
+        ("today", [{**EVENT, "title": " "}], "priority.today[0].title is blank"),
+        ("today", [{"time": None, "title": "Call"}], "priority.today[0].note is blank"),
+    ])
+    def test_priority_field_shapes(self, field, value, failure):
+        assert failure in render.validate(priority_edition(**{field: value}))
 
-    def test_priority_renders_stage_and_not_today(self):
-        p = {"why": [{"text": "t", "source_label": "calendar"}], "first_step": "x",
-             "stage_label": "Blueprint ($1–10M ARR)", "not_today": ["Hiring another rep"]}
-        html = render.render_html(edition(sections=[{
-            "kind": "section", "title": "P", "desk": "priority", "body": "b", "priority": p,
-            "sources": [],
-        }]), render.DEFAULT_MASTHEAD, "{{PRIORITY}}")
-        assert "STAGE · Blueprint" in html and "Hiring another rep" in html
+    def test_priority_renders_every_field_escaped_in_page_order(self):
+        data = priority_edition(
+            yesterday="1 booked (Dana <Acme>)", stage_label="Discovery",
+            stage_why="No revenue yet & you still sell alone",
+            today=[EVENT, {"time": None, "title": "Write the memo", "note": "Keep it short"}],
+            week="Customer conversations: 2. The bar is tens.",
+            who=["Raj — replied to the launch post", "Priya — trial user since Sep 9"],
+            draft='Hey Raj, 20 minutes this week? "Tue" works.',
+            not_today=["Hire a sales team"],
+        )
+        data["sections"][0]["headline"] = "Book 3 customer calls by Friday"
+        assert render.validate(data) == ""
+        html = render.render_html(data, render.DEFAULT_MASTHEAD, "{{PRIORITY}}")
+        order = [
+            "<h3>YESTERDAY</h3>", "1 booked (Dana &lt;Acme&gt;)",
+            "STAGE · Discovery", "No revenue yet &amp; you still sell alone",
+            "<h3>TODAY</h3>", "10:00", "Customer call: Dana", "Go in with: what they use today",
+            "Write the memo", "<h3>THIS WEEK</h3>", "Customer conversations: 2.",
+            "Book 3 customer calls by Friday", "→ x", "<h3>WHO</h3>", "Raj — replied",
+            "Priya — trial user", "<h3>DRAFT</h3>", "Hey Raj, 20 minutes this week? &quot;Tue&quot;",
+            "<h3>NOT TODAY</h3>", "Hire a sales team",
+        ]
+        positions = [html.index(text) for text in order]
+        assert positions == sorted(positions)
 
     def test_priority_is_the_first_section_on_the_page(self):
         html = render.render_html(edition(sections=[

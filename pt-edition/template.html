@@ -217,26 +217,32 @@
     border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline);
     font-weight: 700; font-size: 13px; text-align: center; color: var(--ink);
   }
-  .priority-why {
+  .priority-list {
     list-style: none; margin: 0 auto 4px; padding: 0 11px;
     max-width: 540px;
     font-size: 11px; line-height: 1.55; color: var(--ink);
     text-align: justify;
   }
-  .priority-why li { margin: 0 0 7px; }
-  .priority-why .src { font-style: italic; display: block; color: var(--ink-soft); }
+  .priority-list li { margin: 0 0 7px; }
+  .priority-list .src { font-style: italic; display: block; color: var(--ink-soft); }
   .section--priority h3 {
     margin: 12px 24px 4px; padding: 8px 0 0;
     border-top: 1px solid var(--hairline);
     font-size: 9.5px; letter-spacing: 2px; font-weight: 800;
     text-transform: uppercase; text-align: center; color: var(--ink-soft);
   }
-  .priority-avoid {
+  .priority-note {
+    margin: 0 24px 6px; font-size: 11px; line-height: 1.5;
+    text-align: center; color: var(--ink);
+  }
+  .priority-draft { font-style: italic; white-space: pre-line; }
+  .section--priority h2 + h3 { border-top: none; }
+  .priority-inline {
     list-style: none; margin: 0; padding: 0 11px;
     font-size: 10.5px; color: var(--ink-soft); text-align: center;
   }
-  .priority-avoid li { display: inline; }
-  .priority-avoid li + li::before { content: "  \00b7  "; }
+  .priority-inline li { display: inline; }
+  .priority-inline li + li::before { content: "  \00b7  "; }
   .section--priority .tags { text-align: center; padding: 10px 11px 12px; }
   .section--priority .tags .tag { margin-left: 4px; }
   /* The generic desk bullet markers are for the boxed departments below;

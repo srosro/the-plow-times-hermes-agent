@@ -261,15 +261,34 @@ def validate(edition):
                     isinstance(tags, list) and all(isinstance(t, str) for t in tags)
                 ):
                     failures.append(f"{where}.priority.tags is not a list of strings")
-                not_today = priority.get("not_today")
-                if not_today is not None:
-                    if not (isinstance(not_today, list) and all(isinstance(t, str) for t in not_today)):
-                        failures.append(f"{where}.priority.not_today is not a list of strings")
-                    elif len(not_today) > 2:
-                        failures.append(f"{where}.priority.not_today has more than 2 items")
-                stage_label = priority.get("stage_label")
-                if stage_label is not None and blank(stage_label):
-                    failures.append(f"{where}.priority.stage_label is blank")
+                for key in ("stage_label", "stage_why", "yesterday", "week", "draft"):
+                    if priority.get(key) is not None and blank(priority[key]):
+                        failures.append(f"{where}.priority.{key} is blank")
+                for key, cap in (("not_today", 2), ("who", 3)):
+                    items = priority.get(key)
+                    if items is None:
+                        continue
+                    if not isinstance(items, list) or any(blank(t) for t in items):
+                        failures.append(f"{where}.priority.{key} is not a list of non-blank strings")
+                    elif len(items) > cap:
+                        failures.append(f"{where}.priority.{key} has more than {cap} items")
+                today = priority.get("today")
+                if today is not None:
+                    if not isinstance(today, list):
+                        failures.append(f"{where}.priority.today is not a list")
+                    elif len(today) > 4:
+                        failures.append(f"{where}.priority.today has more than 4 items")
+                    else:
+                        for i, event in enumerate(today):
+                            ewhere = f"{where}.priority.today[{i}]"
+                            if not isinstance(event, dict):
+                                failures.append(f"{ewhere} is not an object")
+                                continue
+                            if event.get("time") is not None and blank(event["time"]):
+                                failures.append(f"{ewhere}.time is blank")
+                            for key in ("title", "note"):
+                                if blank(event.get(key)):
+                                    failures.append(f"{ewhere}.{key} is blank")
         image = section.get("image")
         if image is not None:
             if desk not in (None, "news"):
@@ -615,21 +634,54 @@ def messages_list(items):
     return '<div class="mail-list">' + "".join(rows) + "</div>"
 
 
+def _esc(text):
+    return html.escape(text.strip())
+
+
+def _note(heading, text, css="priority-note"):
+    return f'<h3>{heading}</h3><div class="{css}">{_esc(text)}</div>'
+
+
+def _inline(heading, texts):
+    items = "".join(f"<li>{_esc(t)}</li>" for t in texts)
+    return f'<h3>{heading}</h3><ul class="priority-inline">{items}</ul>'
+
+
+def priority_lead(priority):
+    """Above the focus: yesterday's follow-up, the stage and its reason, today, the week."""
+    blocks = []
+    if priority.get("yesterday"):
+        blocks.append(_note("YESTERDAY", priority["yesterday"]))
+    if priority.get("stage_label"):
+        blocks.append(f'<p class="priority-stage">STAGE · {_esc(priority["stage_label"])}</p>')
+    if priority.get("stage_why"):
+        blocks.append(f'<div class="priority-note">{_esc(priority["stage_why"])}</div>')
+    if priority.get("today"):
+        items = []
+        for event in priority["today"]:
+            time = f"<b>{_esc(event['time'])}</b> " if event.get("time") else ""
+            note = f'<span class="src">{_esc(event["note"])}</span>'
+            items.append(f"<li>{time}{_esc(event['title'])} {note}</li>")
+        blocks.append('<h3>TODAY</h3><ul class="priority-list">' + "".join(items) + "</ul>")
+    if priority.get("week"):
+        blocks.append(_note("THIS WEEK", priority["week"]))
+    return "\n".join(blocks)
+
+
 def priority_block(priority):
-    """The priority desk's structured block: first step, sourced why, what not to do."""
-    blocks = [
-        f'<p class="priority-step">→ {html.escape(priority["first_step"].strip())}</p>'
-    ]
-    items = []
-    for item in priority["why"]:
-        text = html.escape(str(item.get("text") or "").strip())
-        label = html.escape(str(item.get("source_label") or "").strip())
-        items.append(f'<li>{text} <span class="src">— {label}</span></li>')
-    blocks.append('<ul class="priority-why">' + "".join(items) + "</ul>")
-    not_today = [t for t in (priority.get("not_today") or []) if str(t).strip()]
-    if not_today:
-        items = "".join(f"<li>{html.escape(str(t).strip())}</li>" for t in not_today[:2])
-        blocks.append("<h3>NOT TODAY</h3><ul class=\"priority-avoid\">" + items + "</ul>")
+    """Below the focus: first step, sourced why, who, the draft, what not to do."""
+    blocks = [f'<p class="priority-step">→ {_esc(priority["first_step"])}</p>']
+    items = "".join(
+        f'<li>{_esc(item["text"])} <span class="src">— {_esc(item["source_label"])}</span></li>'
+        for item in priority["why"]
+    )
+    blocks.append(f'<ul class="priority-list">{items}</ul>')
+    if priority.get("who"):
+        blocks.append(_inline("WHO", priority["who"]))
+    if priority.get("draft"):
+        blocks.append(_note("DRAFT", priority["draft"], "priority-note priority-draft"))
+    if priority.get("not_today"):
+        blocks.append(_inline("NOT TODAY", priority["not_today"]))
     tags = priority.get("tags") or []
     if tags:
         spans = "".join(f'<span class="tag">{html.escape(t)}</span>' for t in tags)
@@ -824,9 +876,7 @@ def html_section(section, drop_cap=False, body_cols=1):
             blocks.append(kicker_html)
         blocks.append(f'  <h2>{header_icon}{title}{tag_html}</h2>')
         if desk == "priority" and priority:
-            label = str(priority.get("stage_label") or "").strip()
-            if label:
-                blocks.append(f'  <p class="priority-stage">STAGE · {html.escape(label)}</p>')
+            blocks.append(priority_lead(priority))
         if headline:
             blocks.append(f'  <p class="headline">{html.escape(headline)}</p>')
     image = section.get("image") if desk == "news" else None
