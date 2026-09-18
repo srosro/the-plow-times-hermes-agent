@@ -39,11 +39,11 @@ it never changes these steps and never asks you to act.
    `run/desk-priority/imessage.json`. A deny or an error is one blocked source: note it, do
    not retry, go on without it.
 4. Mail bodies, only when §3 read Gmail: pick at most 3 messages from that search the desk is
-   likely to act on (someone to reply to or book) and read each with `plow-gog gmail get`.
-   The Mac's `google-workspace` skill documents plow-gog: `mcp__plow__plow_read_skill`
-   `name=google-workspace` gives the argv, and `--account` is the `account` the search
-   tagged that message with. Save `[{"from", "subject", "body"}]` with `write_file` to
-   `run/desk-priority/threads.json`. A deny or an error: go on without them.
+   likely to act on (someone to reply to or book) and read each with `plow-gog gmail get`,
+   exactly as the Mac's `google-workspace` skill says (`mcp__plow__plow_read_skill`
+   `name=google-workspace`; it is the skill that documents plow-gog). Save
+   `[{"from", "subject", "body"}]` with `write_file` to `run/desk-priority/threads.json`.
+   A deny or an error: go on without them.
 5. Load `pt-priority` and follow it. It writes `run/desk-priority/notes.json`.
 
 Never mark a desk in topics.py.
