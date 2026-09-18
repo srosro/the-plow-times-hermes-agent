@@ -15,7 +15,7 @@
     },
     "stage": {"stage": "pivot", "modifiers": [], "domain": "b2b-saas", "signals": ["arr=6M"], "why": "explicit shock in Company state overrides the ARR band", "label": "Pivot"},
     "advisors": [{
-      "file": "pivot.md",
+      "file": "salyer-pivot.md",
       "advisor": "Patrick Salyer (Mayfield)",
       "stages": ["pivot"],
       "domain": "b2b-saas-enterprise",

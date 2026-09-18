@@ -15,7 +15,7 @@
     },
     "stage": {"stage": "blueprint", "modifiers": [], "domain": "b2b-saas", "signals": ["arr=2.4M", "referenceable=7"], "why": "ARR 2.4M is the $1–10M band", "label": "Blueprint ($1–10M ARR)"},
     "advisors": [{
-      "file": "blueprint.md",
+      "file": "salyer-blueprint.md",
       "advisor": "Patrick Salyer (Mayfield)",
       "stages": ["blueprint"],
       "domain": "b2b-saas-enterprise",
